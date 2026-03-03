@@ -1,0 +1,96 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+# Exit immediately on the first hook failure
+fail_fast: true
+
+# Define default hook types to install
+default_install_hook_types: [commit-msg, pre-commit, pre-push]
+
+# Define repositories and their hooks
+repos:
+  # Conventional Commits for commit message validation
+  - repo: https://github.com/qoomon/git-conventional-commits
+    rev: "v2.7.2"
+    hooks:
+      - id: conventional-commits
+        args: ["-c", ".git-commits.yaml"] # Use a custom config file
+        stages: ["commit-msg"] # Run during commit message creation
+
+  # General pre-commit hooks for basic checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-case-conflict # Checks for files that would conflict on case-insensitive filesystems
+        stages: ["pre-commit"]
+      - id: check-merge-conflict # Checks for files that contain merge conflict strings
+        stages: ["pre-commit"]
+      - id: check-added-large-files # Prevents committing large files
+        args: ["--maxkb=10000"] # Max file size of 10MB
+        stages: ["pre-commit"]
+      - id: check-ast # Checks if Python files are syntactically valid
+        stages: ["pre-commit"]
+      - id: check-executables-have-shebangs # Ensures executable scripts have a shebang
+        stages: ["pre-commit"]
+      - id: check-symlinks # Checks for broken symlinks
+        stages: ["pre-commit"]
+      - id: check-toml # Checks TOML file syntax
+        stages: ["pre-commit"]
+      - id: check-yaml # Checks YAML file syntax
+        stages: ["pre-commit"]
+      - id: debug-statements # Prevents committing files with debug statements (e.g., `pdb.set_trace()`)
+        stages: ["pre-commit"]
+      - id: end-of-file-fixer # Ensures files end with a newline and removes multiple blank lines at EOF
+        stages: ["pre-commit"]
+        exclude: | # Exclude generated protobuf files
+          (?x)^(
+              _pb2\.py|
+              _pb2_grpc\.py
+          )
+      - id: trailing-whitespace # Trims trailing whitespace
+        stages: ["pre-commit"]
+
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.8.9
+    hooks:
+      - id: uv-lock
+        args: ["--check"]
+        stages: ["pre-commit"]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.9.3
+    hooks:
+      - id: bandit
+        args: ["-c", "pyproject.toml", "-r", "vibe"]
+        stages: ["pre-commit"]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: "v0.14.14"
+    hooks:
+      # Run the formatter.
+      - id: ruff-format
+        name: ruff format
+        stages: ["pre-commit"]
+      # Run the linter.
+      - id: ruff-check
+        name: ruff check
+        stages: ["pre-commit"]
+
+  # Local hooks for Ruff, MyPy, and Pytest
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy # Runs MyPy static type checker
+        entry: uv run mypy # Command to execute MyPy
+        language: system
+        pass_filenames: false
+        files: \.py$
+        stages: ["pre-push"] # Run before pushing to remote
+
+      - id: pytest
+        name: pytest # Runs Pytest for unit/integration tests
+        entry: uv run pytest # Command to execute Pytest
+        language: system
+        pass_filenames: false
+        files: \.py$
+        stages: ["pre-push"] # Run before pushing to remote
