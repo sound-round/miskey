@@ -1,5 +1,4 @@
-from .converter import convert_text
-from .registry import get_language_layout
+from .registry import get_language_table
 
 
 def miskey(text: str, language: str) -> str:
@@ -10,5 +9,5 @@ def miskey(text: str, language: str) -> str:
     if not language:
         raise ValueError("language must not be empty")
 
-    layout = get_language_layout(language.lower())
-    return convert_text(text, layout)
+    table = get_language_table(language.lower())
+    return text.translate(table)
