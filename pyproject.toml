@@ -4,6 +4,24 @@ version = "0.1.0"
 description = "A library for converting keys in keyboard layouts"
 readme = "README.md"
 requires-python = ">=3.13"
+license = "MIT"
+authors = [
+  { name = "sound-round", email = "yudaev1@gmail.com" },
+]
+keywords = ["keyboard", "layout", "transliteration"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://github.com/sound-round/miskey"
+Repository = "https://github.com/sound-round/miskey"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
