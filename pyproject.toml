@@ -4,4 +4,97 @@ version = "0.1.0"
 description = "A library for converting keys in keyboard layouts"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+
+[dependency-groups]
+dev = [
+  "pre-commit",
+  "pytest-aio",
+  "ruff",
+  "mypy",
+  "pytest>=9.0.2",
+]
+
+[tool.uv]
+package = false
+
+[tool.mypy]
+packages = ["vibe"]
+ignore_missing_imports = true
+exclude = [
+  '.*_pb2\.py',
+  'vibe/config/.*\.py',
+  'assets',
+] # Exclude generated protobuf files and config
+disable_error_code = "import-untyped" # Allow untyped imports
+
+[tool.ruff]
+fix = false # Disable automatic fixes by default
+line-length = 100
+output-format = "concise"
+target-version = "py313"
+include = [
+  "vibe/**/*.py",
+  "pyproject.toml",
+] # Directories/files to include in linting
+exclude = [ # Directories/files to exclude from linting
+  ".venv",
+  "docs",
+  "examples",
+  "vibe/streams/sorm/proto/vibeapp.py",
+  "**/*_pb2*.py",                       # Generated protobuf files
+  "**/grpc/simple/__init__.py",
+  "**/grpc/vibe/__init__.py",
+]
+
+[tool.ruff.lint]
+allowed-confusables = ["’"] # Allow specific unicode characters
+select = ["ALL"] # Select all rules, then explicitly ignore specific ones
+ignore = [ # Rules to ignore
+  "A",      # flake8-builtins
+  "ANN",    # flake8-annotations
+  "ARG",    # flake8-unused-arguments
+  "COM",    # flake8-commas
+  "D",      # pydocstyle
+  "DJ",     # flake8-django
+  "DTZ",    # flake8-datetimez
+  "E402",   # module level import not at top of file
+  "E712",   # comparison to True/False should be `if cond is True:`
+  "EM",     # flake8-emoticons
+  "FIX",    # flake8-fixme
+  "N",      # pep8-naming
+  "PLC",    # Pylint C-style checks
+  "PLR",    # Pylint R-style checks (refactor)
+  "RSE",    # flake8-raise
+  "RUF001", # ambiguous unicode character
+  "RUF002", # collection of characters that may be confused
+  "RUF012", # type annotation in `__init__`
+  "ERA",    # eradicate (commented out code)
+  "S",      # flake8-bandit (security issues)
+  "SLF",    # flake8-self
+  "TC006",  # type checking block missing `if TYPE_CHECKING:`
+  "TD",     # flake8-todos
+  "TRY",    # tryceratops (exception handling)
+  "UP",     # pyupgrade
+]
+
+[tool.ruff.lint.per-file-ignores]
+"vibe/config/*.py" = [
+  "F401",
+  "F403",
+  "F405",
+] # Ignore unused/wildcard imports in config files
+"test*.py" = [
+  "ARG001",
+  "ASYNC230",
+  "B008",
+  "PGH",
+  "PLR",
+  "RUF059",
+] # Specific ignores for test files
+"conftest.py" = [
+  "ARG001",
+  "F",
+  "PGH",
+  "PLR",
+] # Specific ignores for conftest files
+"__init__.py" = ["F403"] # Ignore 'from .module import *' in __init__.py
