@@ -18,11 +18,11 @@ dev = [
 package = false
 
 [tool.mypy]
-packages = ["vibe"]
+packages = ["miskey"]
 ignore_missing_imports = true
 exclude = [
   '.*_pb2\.py',
-  'vibe/config/.*\.py',
+  'miskey/config/.*\.py',
   'assets',
 ] # Exclude generated protobuf files and config
 disable_error_code = "import-untyped" # Allow untyped imports
@@ -33,17 +33,17 @@ line-length = 100
 output-format = "concise"
 target-version = "py313"
 include = [
-  "vibe/**/*.py",
+  "miskey/**/*.py",
   "pyproject.toml",
 ] # Directories/files to include in linting
 exclude = [ # Directories/files to exclude from linting
   ".venv",
   "docs",
   "examples",
-  "vibe/streams/sorm/proto/vibeapp.py",
+  "miskey/streams/sorm/proto/miskey.py",
   "**/*_pb2*.py",                       # Generated protobuf files
   "**/grpc/simple/__init__.py",
-  "**/grpc/vibe/__init__.py",
+  "**/grpc/miskey/__init__.py",
 ]
 
 [tool.ruff.lint]
@@ -78,7 +78,7 @@ ignore = [ # Rules to ignore
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"vibe/config/*.py" = [
+"miskey/config/*.py" = [
   "F401",
   "F403",
   "F405",
