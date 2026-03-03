@@ -1,7 +1,7 @@
 MANAGER ?= uv
 BUMP ?= minor
 
-.PHONY: test t lint l format f type check pre-commit lock bump-patch bump-minor bump-major patch release major
+.PHONY: test t lint l format f format-check type check release-check pre-commit lock bump-patch bump-minor bump-major patch release major
 
 test t:
 	$(MANAGER) run pytest
@@ -12,10 +12,15 @@ lint l:
 format f:
 	$(MANAGER) run ruff format
 
+format-check:
+	$(MANAGER) run ruff format --check
+
 type:
 	$(MANAGER) run mypy
 
 check: lint type test
+
+release-check: format-check check lock
 
 pre-commit:
 	$(MANAGER) run pre-commit run --all-files
@@ -48,6 +53,8 @@ release:
 	@git checkout main
 	@git pull --ff-only origin main
 	@git checkout develop
+	@git merge --no-ff main
+	@$(MAKE) release-check
 	@$(MANAGER) run bump-my-version bump $(BUMP) --commit --tag
 	@git push origin develop --follow-tags
 	@git checkout main
