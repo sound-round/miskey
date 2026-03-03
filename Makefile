@@ -53,7 +53,11 @@ release:
 	@git checkout main
 	@git pull --ff-only origin main
 	@git checkout develop
-	@git merge --no-ff main
+	@if git merge-base develop main >/dev/null 2>&1; then \
+		git merge --no-ff main; \
+	else \
+		git merge --no-ff --allow-unrelated-histories main; \
+	fi
 	@$(MAKE) release-check
 	@$(MANAGER) run bump-my-version bump $(BUMP) --commit --tag
 	@git push origin develop --follow-tags
