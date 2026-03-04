@@ -1,7 +1,7 @@
 from .registry import get_language_table
 
 
-def miskey(text: str, language: str) -> str:
+def convert(text: str, language: str) -> str:
     if not isinstance(text, str):
         raise TypeError("text must be a string")
     if not isinstance(language, str):
