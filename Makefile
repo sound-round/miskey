@@ -1,7 +1,7 @@
 MANAGER ?= uv
 BUMP ?= minor
 
-.PHONY: test t lint l format f format-check type check release-check pre-commit lock bump-patch bump-minor bump-major patch release major
+.PHONY: test t lint l format f format-check type check release-check pre-commit lock bump-patch bump-minor bump-major patch release major build publish
 
 test t:
 	$(MANAGER) run pytest
@@ -66,3 +66,9 @@ release:
 	@git push origin main
 	@git push origin --tags
 	@git checkout develop
+
+build:
+	$(MANAGER) build
+
+publish:
+	$(MANAGER) run twine upload dist/*

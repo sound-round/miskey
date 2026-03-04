@@ -17,24 +17,24 @@ pip install miskey
 ## Quick Start
 
 ```python
-from miskey import miskey
+from miskey import convert
 
-print(miskey("ghbdtn", "en-ru"))   # привет
-print(miskey("Vjcrdf", "en-ru"))   # Москва
-print(miskey("руддщ", "ru-en"))   # hello
+print(convert("ghbdtn", "en-ru"))   # привет
+print(convert("Vjcrdf", "en-ru"))   # Москва
+print(convert("руддщ", "ru-en"))   # hello
 ```
 
 Characters that are not present in the mapping are kept as-is:
 
 ```python
-from miskey import miskey
+from miskey import convert
 
-print(miskey("ghbdtn! vbh 123", "en-ru"))  # привет! мир 123
+print(convert("ghbdtn! vbh 123", "en-ru"))  # привет! мир 123
 ```
 
 ## API
 
-### `miskey(text: str, language: str) -> str`
+### `convert(text: str, language: str) -> str`
 
 - `text` - input string
 - `language` - conversion direction (for example, `en-ru`)
